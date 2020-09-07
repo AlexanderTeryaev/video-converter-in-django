@@ -1,0 +1,90 @@
+.header-margin {
+    margin-top: 40px;
+}
+
+.no-decoration {
+    text-decoration: none !important;
+}
+
+.format-select {
+    width: 100%;
+    padding-left: 10px;
+}
+
+.form-custom {
+    margin-top: 50px;
+    font-size: x-large;
+}
+
+.dropzone .dz-preview .dz-image {
+    width: 300px !important;
+}
+
+#progress {
+  display: block;
+  width:100%;
+}
+
+#progress .bar {
+  height: 40px;
+  width: 0%;
+  background: lightblue;
+  text-align: center;
+}
+
+body {
+    font-size: x-large;
+}
+
+nav {
+    width: 100%;
+    height: 40px;
+}
+
+.nav a{
+    color: white !important;
+    font-size: 0.8em !important;
+    }
+.nav li{
+    padding-right:5px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+.heaven{
+    background-color: #41c6fa;
+    background-image: -webkit-linear-gradient(72deg, #34ADFF 32%, #4CBFFF 40%);
+    height: auto;border-bottom:30px solid #fffffe;
+}
+
+.glow {
+    color: yellow;
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px orange, 0 0 10px #fffffe, 0 0 10px orange, 0 0 10px #fffffe;
+    }
+
+    to {
+        text-shadow: 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px #fffffe, 0 0 10px #fffffe;
+    }
+}
+
+.custom-title {
+    font-size:40px;margin-top:30px;text-align:center;margin-left:5px;color:orange;width:90%;letter-spacing:1px;text-shadow: 1px 3px 3px #fffffe;
+}
+
+.custom_h2 {
+font-family:'roboto'sans-serif;font-size:19px;text-align:center;width:95%;margin-left:14px;color:#fffffe;
+}
+
+.grey{color:grey;}
+.orange{color:orange;}

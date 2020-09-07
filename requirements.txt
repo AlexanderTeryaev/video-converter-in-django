@@ -1,0 +1,2 @@
+django==2.0
+apscheduler==3.5.3

@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
+    <link href="{% static 'css/app.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>
+    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
+    {% block header %}
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+    <footer style="background:#224082; width:100%;height:auto;text-align:center;border-top:1px solid white;color:grey;">
+        <span style="padding:12px;width:90%;color:white;text-decoration:none;font-size:18px;"> <a href="https://onlinevideoconversion.com/">Home</a>  <a href="https://onlinevideoconversion.com/terms">Terms</a>  <a href="https://onlinevideoconversion.com/policy">Privacy</a> <a href="https://onlinevideoconversion.com/features">Features</a></span>
+        <br>
+        <span style="font-size: 13px;">contact: mathias.t@safe-mail.net </span>
+        <br><p style="font-size: 13px;">© 2019 OnlineVideoConversion.com - Online video converter</p>
+        <br>
+    </footer>
+</body>
+</html>
+<script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.timepicker/0.2.6/js/bootstrap-timepicker.min.js"></script>
+<script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+
+<script type="text/javascript">
+    var fileid = 0;
+    var token = '{{csrf_token}}';
+
+    $('#convertto').datetimepicker({
+        format: 'HH:mm:ss',
+    });
+    $('#convertfrom').datetimepicker({
+        format: 'HH:mm:ss',
+    });
+
+    $("#convertform :input").prop("disabled", true);
+
+    $('#startfile').change(function() {
+        if (this.checked) {
+            $("#convertfrom").prop('disabled', true);
+        } else {
+            $("#convertfrom").prop('disabled', false);
+        }
+    });
+
+    $('#endfile').change(function() {
+        if (this.checked) {
+            $("#convertto").prop('disabled', true);
+        } else {
+            $("#convertto").prop('disabled', false);
+        }
+    });
+
+    Dropzone.options.dropzoneForm = {
+        acceptedFiles: ".mp4, .avi, .mpg, .mov, .wmv, .flv, .m4v, .webm, .mkv, .3gp, .mp3, .aac, .ogg, .wma, .m4a, .flac, .wav",
+        maxFiles:1,
+        maxFilesize: 1000,
+        timeout: 180000,
+        init: function() {
+            this.on('addedfile', function(file) {
+                init_status();
+                if (this.files.length > 1) {
+                  this.removeFile(this.files[0]);
+                }
+            });
+        },
+        success:function(file, response)
+        {
+            if (response.success) {
+                fileid = response.file_id;
+                $("#file_id").val(response.file_id);
+                $("#convertto").val(response.length);
+
+                $("#convertform :input").prop("disabled", false);
+                if($("#startfile").prop('checked') == true) {
+                    $("#convertfrom").prop('disabled', true);
+                } else {
+                    $("#convertfrom").prop('disabled', false);
+                }
+                if($("#endfile").prop('checked') == true) {
+                    $("#convertto").prop('disabled', true);
+                } else {
+                    $("#convertto").prop('disabled', false);
+                }
+            } else {
+                fileid = 0;
+                $("#convertform :input").prop("disabled", true);
+            }
+        }
+    };
+
+    var processing = false;
+    var frm = $('#convertform');
+    frm.submit(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/',
+            data: frm.serialize(),
+            success: function (data) {
+
+            },
+            error: function(data) {
+                processing = false;
+                $('#convert-status').text("Converting failed!");
+            },
+            beforeSend: function () {
+                processing = true;
+                $('#convert-status').text("Converting...");
+                getStatus();
+            }
+        });
+        return false;
+    });
+
+    function getStatus() {
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            type: 'POST',
+            url: '/get_status',
+            data: {'file_id': fileid},
+            success: function (data) {
+                if (data.status > 99) {
+                    processing = false;
+                    setProgressBar(100);
+                    filedownload(data.path);
+                    $('#convert-status').text("Converting complete!");
+                }else {
+                    setProgressBar(data.status);
+                    getStatus();
+                }
+            },
+            error: function (data) {
+                if (processing) {
+                    getStatus();
+                }
+            }
+        });
+    }
+
+    function filedownload(file_path) {
+        console.log(file_path);
+        var a = document.createElement('A');
+        a.href = file_path;
+        a.download = file_path.substr(file_path.lastIndexOf('/') + 1);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    function setProgressBar(percentage) {
+        $('#progress .bar').css(
+            'width',
+            percentage + '%'
+        ).text(percentage + '%');
+    }
+
+    function init_status() {
+        $('#convert-status').text("");
+        $('#progress .bar').css(
+            'width',
+            0 + '%'
+        ).text('');
+    }
+</script>

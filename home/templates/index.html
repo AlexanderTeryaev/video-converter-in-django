@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block header %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<title>Online Video Conversion  – Convert Videos to MP4, MP3, Flv, AVI for free</title>
+<meta name="keywords" content="Online Video Converter, Video Converter, convert to MP3,MP4,FLV, AVI,  Online Video Conversion, Convert files, media converter, "/>
+<meta name="description" content="  Convert Video or Audio files to MP4, MP3, FLV, AVI and other file types in highest quality. Easy to use! Free forever! No Sign in required.  Works fast and  anonymous! Your personal data is safe.  "/>
+<meta name="robots" content="index, follow">
+<!-- Open Graph data -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://www.onlinevideoconversion.com"/>
+<meta property="og:site_name" content="OnlineVideoConversion.com"/>
+<meta property="og:title" content=" Online Video Conversion  – Convert Videos to MP4, MP3, Flv, AVI for free "/>
+<meta property="og:description" content=" Convert Video or Audio files to MP4, MP3, FLV, AVI and other file types in highest quality. Easy to use! Free forever! No Sign in required.  Works fast and  anonymous! Your personal data is safe.  "/>
+<meta property="og:url" content="https://www.onlinevideoconversion.com"/>
+{% endblock %}
+
+{% block content %}
+<header class="heaven" style="width:100%; height:auto;margin:none;padding:1px; ">
+        
+        <p class="glow" style="font-size:24px;margin-top:50px;text-align:center;margin-left:5px;color:orange;width:90%;letter-spacing:1px;text-shadow: 1px 3px 3px #fffffe;"><a href="/" style="color:inherit; text-decoration: none">Online Video Conversion</a></p>
+
+        <br>
+        <p class="custom_h2" style=""font-family:'roboto'sans-serif;font-size:19px;text-align:center;width:95%;margin-left:14px;color:#fffffe;"">Online Video Conversion - Convert your video and audio files to various formats with ease</p>
+<br>
+
+    </header>
+<nav style="text-align:center;padding:3px;font-size:17px;">
+          
+          
+       - <span><a class="grey" href="/">Home</a></span> <span ><a class="orange" href="terms">Terms</a></span> <span><a class="grey" href="policy">Privacy Policy</a></span> <span><a class="orange" href="features">Features</a></span> -
+            
+        </nav>
+<br>
+<div style="text-align:center;"
+<p> Max. upload size: 90 mb</p>
+</div>
+<div class="container text-center justify-content-center">
+    <!--    file upload zone    -->
+    <div class="row mt-5">
+       <div class="col-12">
+        <form class="dropzone" id="dropzoneForm" action="/upload_file">
+            {% csrf_token %}
+        </form>
+      </div>
+    </div>
+
+    <!--    convert form    -->
+    <form id="convertform" method="post" action="/" class="form-custom">
+        {% csrf_token %}
+        <input type="hidden" id="file_id" name="file_id" value="0">
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <select id="avformat" name="avformat" class="selectpicker format-select">
+                    <optgroup label="Video converter">
+                        <option value="3gp">.3gp</option>
+                        <option value="avi">.avi</option>
+                        <option value="flv">.flv</option>
+                        <option value="m4v">.m4v</option>
+                        <option value="mkv">.mkv</option>
+                        <option value="mov">.mov</option>
+                        <option value="mp4">.mp4</option>
+                        <option value="mpeg">.mpeg</option>
+                        <option value="webm">.webm</option>
+                        <option value="wmv">.wmv</option>
+                    </optgroup>
+
+                    <optgroup label="Audio Converter">
+                        <option value="aac">.aac</option>
+                        <option value="flac">.flac</option>
+                        <option value="m4a">.m4a</option>
+                        <option value="mp3">.mp3</option>
+                        <option value="ogg">.ogg</option>
+                        <option value="wav">.wav</option>
+                        <option value="wma">.wma</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-6 mt-1">
+                <label class="mr-3">FROM</label>
+                <label><input type="checkbox" checked id="startfile" name="startfile">Start of File</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="convertfrom" id="convertfrom" value="00:00:00" class="form-control" style="font-size: x-large;" disabled/>
+            </div>
+
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-6 mt-1">
+                <label class="mr-3">TO</label>
+                <label><input type="checkbox" checked id="endfile" name="endfile">End of File</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="convertto" id="convertto" value="00:00:00" class="form-control" style="font-size: x-large;" disabled/>
+            </div>
+        </div>
+        <div class="row">
+            <button id="convertbtn" type="submit" class="btn btn-primary btn-block" style="height: 60px; font-size: x-large;">CONVERT AND DOWNLOAD</button>
+            <a type="submit" style="height: 60px; font-size: x-large;" class="btn btn-primary btn-block" href="/">CONVERT MORE FILES</a>
+        </div>
+    </form>
+
+    <!--    status div    -->
+    <div class="row mt-5 mb-1">
+        <p id="convert-status"></p>
+        <div id="progress">
+            <div class="bar"></div>
+        </div>
+    </div>
+</div>
+<br>
+<div style="background-color:#fffffe;width:100%;padding:20px;height:auto;text-align:center;">
+<h1 style="font-size:26px;text-align:center;"> Online Video Conversion - Download and Convert your files for free and anonymous</h1>
+<p style="font-family:'roboto', sans-serif; text-align:center;letter-spacing:1px;color:grey;width:95%;">
+Your free online video converter. Upload and convert your private files with ease! Online, fast and secure!</p>
+<br>
+<br>
+<div style="background-color:#f8fafc;style="width:100%;height:auto;text-align:center;">
+<h2>Supported file formats</h2>
+<p>Choose from various file formats:</p>
+<p style="width:85%;text-align:center;color:grey;margin-left:28px;font-family:'roboto', sans-serif;font-size:20px;padding:5px;"><br>.3gp / .avi / .flv / .m4v / .mkv / .mov / .mp4 / .mpeg / .webm / .wmv / .aac / .flac / .m4a / .mp3 / .ogg / .wav / .wma</p>
+</div>
+
+
+
+</div>
+</div>
+</div>
+</div>
+<script type="2ba68912238a13d56978c9fd-text/javascript" src="/js/widget.js?id=17a5d6c70f91f4f1c94c"></script>
+<p style="text-align:center;color:grey;">Share with your friends:</p>
+<div style="text-align:center;">
+<a href="#" style="blue;text-align:center;">Go to top</a>
+</div>
+<p class="text-center">
+<a style="color:green;" href="whatsapp://send?text=https://Onlinevideoconversion.com -Your free video converter!" data-action="share/whatsapp/share">Whatsapp |</a>
+<a style="color:blue;" href="https://www.facebook.com/sharer/sharer.php?u=https://onlinevideoconversion.com/">facebook |</a><br>
+<a style="color:#1A95E0;" href="https://twitter.com/home?status=https://onlinevideoconversion.com/ Onlinevideoconversion.com - Your free video converter!">Tweet |</a>
+<a style="color:black;" href="/cdn-cgi/l/email-protection#7e171018113e1b061f130e121b501d111341580d0b1c141b1d0a43581c111a0743160a0a0e0d44515111101217101b08171a1b111d1110081b0c0d17111050110c19515e31101217101b08171a1b111d1110081b0c0d17111050110c195e535e27110b0c5e180c1b1b5e08171a1b115e1a11091012111f1a1b0c5f">E-MAIL</a>
+
+{% endblock %}
+
